@@ -31,12 +31,36 @@ class RoomScreen extends ConsumerWidget {
           // Room background
           const _RoomBackground(),
 
-          // Window (top center)
-          const Positioned(
+          // Window (top center) with "Trevor's" left and "Room" right
+          Positioned(
             top: 40,
             left: 0,
             right: 0,
-            child: Center(child: _WindowDecoration()),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Trevor's",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: TrevorColors.textDark,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const _WindowDecoration(),
+                const SizedBox(width: 12),
+                const Text(
+                  'Room',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: TrevorColors.textDark,
+                  ),
+                ),
+              ],
+            ),
           ),
 
           // Toy grid — two columns
@@ -300,24 +324,41 @@ class _TrevorCharacterState extends State<_TrevorCharacter>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _bob,
-      builder: (_, child) =>
-          Transform.translate(offset: Offset(0, _bob.value), child: child),
-      child: const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('🧒', style: TextStyle(fontSize: 64)),
-          Text(
-            'Trevor',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: TrevorColors.textDark,
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Emoji + name bob together
+        AnimatedBuilder(
+          animation: _bob,
+          builder: (_, child) =>
+              Transform.translate(offset: Offset(0, _bob.value), child: child),
+          child: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('🧒', style: TextStyle(fontSize: 64)),
+              Text(
+                'Trevor',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: TrevorColors.textDark,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        // Tagline stays still
+        const SizedBox(height: 4),
+        const Text(
+          'Play. Learn. Smile.',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: TrevorColors.coral,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
     );
   }
 }

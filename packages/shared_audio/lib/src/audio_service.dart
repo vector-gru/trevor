@@ -42,7 +42,7 @@ class AudioService {
     // Initialise the SoLoud engine once — runs on its own C++ audio thread.
     await _soloud.init();
 
-    await _musicPlayer.setVolume(0.4);
+    await _musicPlayer.setVolume(0.08);
 
     // Load each SFX into SoLoud memory. loadAsset decodes the MP3 to PCM
     // and pins it in the engine — play() after this is a single C call.
@@ -70,10 +70,30 @@ class AudioService {
     if (_muted || !_ready) return;
     final source = _sources[sound];
     if (source == null) return;
+    _playSfx(sound, source);
+  }
+
+  Future<void> _playSfx(SoundId sound, AudioSource source) async {
     try {
-      _soloud.play(source, volume: 0.85);
+      final handle = await _soloud.play(source, volume: 0.85);
+      if (sound == SoundId.confetti) {
+        _stopHalfway(source, handle);
+      }
     } catch (e) {
       debugPrint('[AudioService] SFX error ${sound.name}: $e');
+    }
+  }
+
+  Future<void> _stopHalfway(AudioSource source, SoundHandle handle) async {
+    try {
+      final duration = _soloud.getLength(source);
+      await Future.delayed(duration ~/ 2);
+      // Fade out over 300 ms rather than cutting abruptly.
+      _soloud.fadeVolume(handle, 0, const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 320));
+      _soloud.stop(handle);
+    } catch (_) {
+      // Handle may already be finished — safe to ignore.
     }
   }
 
@@ -97,7 +117,7 @@ class AudioService {
       _musicPlayer.setVolume(0);
     } else {
       _soloud.setGlobalVolume(1);
-      _musicPlayer.setVolume(0.4);
+      _musicPlayer.setVolume(0.08);
     }
   }
 
