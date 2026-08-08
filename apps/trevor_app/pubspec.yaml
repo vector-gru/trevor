@@ -1,0 +1,63 @@
+name: trevor_app
+description: "Trevor - Play. Learn. Smile. An offline-first collection of fun and educational mini games for young children."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Local storage
+  hive_flutter: ^1.1.0
+
+  # Audio
+  audioplayers: ^6.1.0
+
+  # Animations
+  lottie: ^3.1.2
+
+  # Utils
+  go_router: ^14.6.2
+
+  # Local packages
+  shared_ui:
+    path: ../../packages/shared_ui
+  shared_audio:
+    path: ../../packages/shared_audio
+  shared_models:
+    path: ../../packages/shared_models
+  shared_utils:
+    path: ../../packages/shared_utils
+  balloon_pop:
+    path: ../../packages/balloon_pop
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  riverpod_generator: ^2.6.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/room/
+    - assets/images/balloons/
+    - assets/images/characters/
+    - assets/audio/sfx/
+    - assets/audio/music/
+    - assets/animations/lottie/
+
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-VariableFont_wdth,wght.ttf
