@@ -1,0 +1,19 @@
+# Flutter/Dart build output
+build/
+.dart_tool/
+
+# Dependency cache
+.pub-cache/
+.pub/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+
+# Environment / secrets
+.env
+*.env.local

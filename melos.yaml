@@ -1,0 +1,27 @@
+name: trevor
+repository: https://github.com/hintekk/trevor
+
+packages:
+  - apps/**
+  - packages/**
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    run: melos exec -- flutter analyze
+    description: Run Flutter analyzer across all packages.
+
+  format:
+    run: melos exec -- dart format lib --set-exit-if-changed
+    description: Check formatting across all packages.
+
+  test:
+    run: melos exec -- flutter test
+    description: Run tests across all packages.
+
+  get:
+    run: melos exec -- flutter pub get
+    description: Get dependencies for all packages.

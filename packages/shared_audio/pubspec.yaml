@@ -1,0 +1,18 @@
+name: shared_audio
+description: "Shared audio service for the Trevor app."
+version: 0.1.0
+publish_to: "none"
+
+environment:
+  sdk: ^3.12.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  audioplayers: ^6.1.0
+  flutter_riverpod: ^2.6.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
