@@ -1,21 +1,25 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
 import 'sound_id.dart';
 
 /// Manages all audio playback for the Trevor app.
 ///
-/// SFX uses [AudioPool] with [PlayerMode.lowLatency].
-/// On Android this switches the backing implementation from MediaPlayer
-/// to SoundPool — the native low-latency audio path designed for game SFX.
-/// Bytes are decoded and pinned in the audio server's memory; each play
-/// is a single binder call with no prepareAsync overhead.
+/// SFX uses [SoLoud] — a C++ audio engine (SoLoud) via dart:ffi.
+/// There are NO method channels, NO MediaPlayer, NO audio focus requests.
+/// All SFX calls are synchronous C interop that never touch the main thread
+/// message loop, which eliminates the frame-skip problem entirely.
 ///
-/// Background music uses a separate [AudioPlayer] in default mode
-/// (MediaPlayer is appropriate for one long looping track).
+/// Background music uses [AudioPlayer] (audioplayers) which is fine for
+/// a single looping track.
 class AudioService {
-  final Map<SoundId, AudioPool> _pools = {};
-  final AudioPlayer _musicPlayer = AudioPlayer();
+  final _soloud = SoLoud.instance;
+  final _musicPlayer = AudioPlayer();
+
+  // Loaded sound sources — one per SFX file.
+  final Map<SoundId, AudioSource> _sources = {};
 
   bool _muted = false;
   bool _ready = false;
@@ -35,43 +39,41 @@ class AudioService {
   ];
 
   Future<void> init() async {
+    // Initialise the SoLoud engine once — runs on its own C++ audio thread.
+    await _soloud.init();
+
     await _musicPlayer.setVolume(0.4);
 
-    // Build one AudioPool per SFX sound.
-    // minPlayers=2 pre-warms 2 instances so rapid taps never wait.
-    // maxPlayers=4 allows up to 4 simultaneous plays of the same sound.
-    // PlayerMode.lowLatency → SoundPool on Android, AVAudioEngine on iOS.
+    // Load each SFX into SoLoud memory. loadAsset decodes the MP3 to PCM
+    // and pins it in the engine — play() after this is a single C call.
     for (final sound in _sfxSounds) {
       try {
-        final pool = await AudioPool.createFromAsset(
-          path: sound.path,
-          minPlayers: 2,
-          maxPlayers: 4,
-          playerMode: PlayerMode.lowLatency,
+        final bytes = await rootBundle.load('assets/${sound.path}');
+        final source = await _soloud.loadMem(
+          sound.name,
+          bytes.buffer.asUint8List(),
         );
-        _pools[sound] = pool;
+        _sources[sound] = source;
       } catch (e) {
-        debugPrint('[AudioService] Pool init failed for ${sound.name}: $e');
+        debugPrint('[AudioService] Failed to load ${sound.name}: $e');
       }
     }
 
     _ready = true;
-    debugPrint('[AudioService] Ready — ${_pools.length} pools initialised');
+    debugPrint(
+      '[AudioService] SoLoud ready — ${_sources.length} sounds loaded',
+    );
   }
 
-  /// Fire-and-forget SFX play. Returns immediately.
+  /// Play a sound effect. Synchronous C call — zero main-thread overhead.
   void playSound(SoundId sound) {
     if (_muted || !_ready) return;
-    final pool = _pools[sound];
-    if (pool == null) return;
-    _startPool(pool, sound);
-  }
-
-  Future<void> _startPool(AudioPool pool, SoundId sound) async {
+    final source = _sources[sound];
+    if (source == null) return;
     try {
-      await pool.start(volume: 0.85);
+      _soloud.play(source, volume: 0.85);
     } catch (e) {
-      debugPrint('[AudioService] playSound error ${sound.name}: $e');
+      debugPrint('[AudioService] SFX error ${sound.name}: $e');
     }
   }
 
@@ -90,16 +92,23 @@ class AudioService {
 
   void setMuted(bool muted) {
     _muted = muted;
-    _musicPlayer.setVolume(muted ? 0 : 0.4);
+    if (muted) {
+      _soloud.setGlobalVolume(0);
+      _musicPlayer.setVolume(0);
+    } else {
+      _soloud.setGlobalVolume(1);
+      _musicPlayer.setVolume(0.4);
+    }
   }
 
   void toggleMute() => setMuted(!_muted);
 
   Future<void> dispose() async {
-    for (final pool in _pools.values) {
-      await pool.dispose();
+    for (final source in _sources.values) {
+      await _soloud.disposeSource(source);
     }
-    _pools.clear();
+    _sources.clear();
+    _soloud.deinit();
     await _musicPlayer.dispose();
   }
 }
