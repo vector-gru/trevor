@@ -17,3 +17,8 @@ build/
 # Environment / secrets
 .env
 *.env.local
+
+# Android signing — NEVER commit these
+apps/trevor_app/android/key.properties
+apps/trevor_app/android/app/*.jks
+apps/trevor_app/android/app/*.keystore
