@@ -17,6 +17,7 @@ import 'sound_id.dart';
 class AudioService {
   final _soloud = SoLoud.instance;
   final _musicPlayer = AudioPlayer();
+  final _greetingPlayer = AudioPlayer(); // dedicated player for voice clips
 
   // Loaded sound sources — one per SFX file.
   final Map<SoundId, AudioSource> _sources = {};
@@ -36,13 +37,15 @@ class AudioService {
     SoundId.confetti,
     SoundId.buttonTap,
     SoundId.roomEnter,
+    SoundId.balloonsStart,
+    // trevorGreeting excluded — played via audioplayers (M4A)
   ];
 
   Future<void> init() async {
     // Initialise the SoLoud engine once — runs on its own C++ audio thread.
     await _soloud.init();
 
-    await _musicPlayer.setVolume(0.08);
+    await _musicPlayer.setVolume(0.04);
 
     // Load each SFX into SoLoud memory. loadAsset decodes the MP3 to PCM
     // and pins it in the engine — play() after this is a single C call.
@@ -108,7 +111,36 @@ class AudioService {
     }
   }
 
+  void stopGreeting() {
+    _greetingPlayer.stop();
+  }
+
+  /// Called when a game starts — stops greeting and plays the game intro clip.
+  void playGameStart(SoundId introSound) {
+    stopGreeting();
+    playSound(introSound);
+  }
+
   Future<void> stopMusic() => _musicPlayer.stop();
+
+  /// Play the Trevor greeting voice clip via audioplayers (supports M4A).
+  Future<void> playGreeting() async {
+    if (_muted) return;
+    try {
+      await _greetingPlayer.stop();
+      await _greetingPlayer.setReleaseMode(ReleaseMode.stop);
+      await _greetingPlayer.setVolume(1.0);
+      await _greetingPlayer.setAudioContext(
+        AudioContextConfig(
+          focus: AudioContextConfigFocus.mixWithOthers,
+        ).build(),
+      );
+      await _greetingPlayer.play(AssetSource(SoundId.trevorGreeting.path));
+      debugPrint('[AudioService] Playing greeting');
+    } catch (e) {
+      debugPrint('[AudioService] Greeting error: $e');
+    }
+  }
 
   void setMuted(bool muted) {
     _muted = muted;
@@ -117,7 +149,7 @@ class AudioService {
       _musicPlayer.setVolume(0);
     } else {
       _soloud.setGlobalVolume(1);
-      _musicPlayer.setVolume(0.08);
+      _musicPlayer.setVolume(0.04);
     }
   }
 
@@ -129,6 +161,7 @@ class AudioService {
     }
     _sources.clear();
     _soloud.deinit();
+    await _greetingPlayer.dispose();
     await _musicPlayer.dispose();
   }
 }

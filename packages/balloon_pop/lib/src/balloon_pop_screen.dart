@@ -20,6 +20,10 @@ class _BalloonPopScreenState extends ConsumerState<BalloonPopScreen> {
   int _lastScore = 0;
   AudioService? _audio;
 
+  // Active bird animations keyed by unique id.
+  final Map<int, Offset> _birds = {};
+  int _birdCounter = 0;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -32,6 +36,8 @@ class _BalloonPopScreenState extends ConsumerState<BalloonPopScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(balloonPopProvider.notifier).startGame();
+      // Stop any home screen greeting, then announce the game.
+      _audio?.playGameStart(SoundId.balloonsStart);
       _audio?.playMusic(SoundId.bgBalloonPop);
     });
   }
@@ -40,6 +46,13 @@ class _BalloonPopScreenState extends ConsumerState<BalloonPopScreen> {
   void dispose() {
     _audio?.stopMusic();
     super.dispose();
+  }
+
+  void _spawnBird(Offset position) {
+    if (!mounted) return;
+    setState(() {
+      _birds[_birdCounter++] = position;
+    });
   }
 
   @override
@@ -83,7 +96,11 @@ class _BalloonPopScreenState extends ConsumerState<BalloonPopScreen> {
 
           // Balloons
           ...state.balloons.map(
-            (b) => BalloonWidget(key: ValueKey(b.id), data: b),
+            (b) => BalloonWidget(
+              key: ValueKey(b.id),
+              data: b,
+              onGiftPopped: _spawnBird,
+            ),
           ),
 
           // Score HUD
@@ -100,6 +117,17 @@ class _BalloonPopScreenState extends ConsumerState<BalloonPopScreen> {
                 ),
                 _ScoreBadge(score: state.score, stars: state.stars),
               ],
+            ),
+          ),
+
+          // Bird animations (gift balloon surprise)
+          ..._birds.entries.map(
+            (e) => BirdFlyAnimation(
+              key: ValueKey('bird_${e.key}'),
+              origin: e.value,
+              onComplete: () {
+                if (mounted) setState(() => _birds.remove(e.key));
+              },
             ),
           ),
 

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_audio/shared_audio.dart';
 import 'package:shared_ui/shared_ui.dart';
 
 /// Trevor's Room — the home screen.
@@ -19,11 +21,45 @@ import 'package:shared_ui/shared_ui.dart';
 ///   │                           │
 ///   │       🧒 Trevor           │
 ///   └──────────────────────────┘
-class RoomScreen extends ConsumerWidget {
+class RoomScreen extends ConsumerStatefulWidget {
   const RoomScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RoomScreen> createState() => _RoomScreenState();
+}
+
+class _RoomScreenState extends ConsumerState<RoomScreen> {
+  Timer? _greetingTimer;
+  late AudioService _audio;
+
+  @override
+  void initState() {
+    super.initState();
+    _greetingTimer = Timer(const Duration(seconds: 3), _playGreeting);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Cache before we might need it in dispose — safe to call ref here.
+    _audio = ref.read(audioServiceProvider);
+  }
+
+  void _playGreeting() {
+    if (!mounted) return;
+    _audio.playGreeting();
+    _greetingTimer = Timer(const Duration(seconds: 30), _playGreeting);
+  }
+
+  @override
+  void dispose() {
+    _greetingTimer?.cancel();
+    _audio.stopGreeting(); // uses cached ref, never touches Riverpod
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -97,7 +133,7 @@ class _ToyGrid extends StatelessWidget {
         label: 'Balloons',
         color: TrevorColors.balloonRed,
         available: true,
-        onTap: () => context.push('/balloon-pop'),
+        onTap: () => context.go('/balloon-pop'),
       ),
       _ToyItem(
         emoji: '🧸',

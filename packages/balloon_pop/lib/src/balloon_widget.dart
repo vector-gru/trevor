@@ -12,7 +12,10 @@ import 'balloon_pop_state.dart';
 class BalloonWidget extends ConsumerStatefulWidget {
   final BalloonData data;
 
-  const BalloonWidget({super.key, required this.data});
+  /// Called with the screen-space center position when a gift balloon is popped.
+  final void Function(Offset position)? onGiftPopped;
+
+  const BalloonWidget({super.key, required this.data, this.onGiftPopped});
 
   @override
   ConsumerState<BalloonWidget> createState() => _BalloonWidgetState();
@@ -23,6 +26,9 @@ class _BalloonWidgetState extends ConsumerState<BalloonWidget>
   late final AnimationController _floatCtrl;
   late final Animation<double> _yAnim;
   late final Animation<double> _sway;
+
+  // Track current screen position so we can pass it to the gift callback.
+  Offset _currentPosition = Offset.zero;
 
   @override
   void initState() {
@@ -69,7 +75,6 @@ class _BalloonWidgetState extends ConsumerState<BalloonWidget>
     if (widget.data.popped) return;
     HapticUtils.pop();
 
-    // Play the right sound for this balloon type
     final audio = ref.read(audioServiceProvider);
     final sound = switch (widget.data.type) {
       BalloonType.rainbow => SoundId.balloonRainbowPop,
@@ -79,6 +84,10 @@ class _BalloonWidgetState extends ConsumerState<BalloonWidget>
       _ => SoundId.balloonPop,
     };
     audio.playSound(sound);
+
+    if (widget.data.type == BalloonType.gift) {
+      widget.onGiftPopped?.call(_currentPosition);
+    }
 
     ref.read(balloonPopProvider.notifier).popBalloon(widget.data.id);
   }
@@ -92,6 +101,7 @@ class _BalloonWidgetState extends ConsumerState<BalloonWidget>
       builder: (_, _) {
         final x = widget.data.x * screenSize.width + _sway.value;
         final y = _yAnim.value * screenSize.height;
+        _currentPosition = Offset(x, y);
 
         return Positioned(
           left: x - widget.data.size / 2,

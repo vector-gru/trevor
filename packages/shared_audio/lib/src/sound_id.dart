@@ -15,6 +15,8 @@ enum SoundId {
   // UI SFX
   buttonTap,
   roomEnter,
+  trevorGreeting,
+  balloonsStart,
 
   // Music
   bgRoomTheme,
@@ -36,6 +38,8 @@ enum SoundId {
     SoundId.confetti => 'audio/sfx/confetti.mp3',
     SoundId.buttonTap => 'audio/sfx/button_tap.mp3',
     SoundId.roomEnter => 'audio/sfx/room_enter.mp3',
+    SoundId.trevorGreeting => 'audio/sfx/trevor_greeting.m4a',
+    SoundId.balloonsStart => 'audio/sfx/balloons_start.WAV',
     SoundId.bgRoomTheme => 'audio/music/room_theme.mp3',
     SoundId.bgBalloonPop => 'audio/music/balloon_pop_theme.mp3',
   };
