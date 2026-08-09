@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Background gradient: warm cream wall to soft floor -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF8E1"/>
+      <stop offset="78%" stop-color="#FFF8E1"/>
+      <stop offset="78%" stop-color="#D7CCC8"/>
+      <stop offset="100%" stop-color="#C4B5B0"/>
+    </linearGradient>
+
+    <!-- Glow for star -->
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE57F"/>
+      <stop offset="100%" stop-color="#FFB300" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Balloon red gradient -->
+    <radialGradient id="ballRed" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#FF8A80"/>
+      <stop offset="100%" stop-color="#E53935"/>
+    </radialGradient>
+
+    <!-- Balloon yellow gradient -->
+    <radialGradient id="ballYellow" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#FFF176"/>
+      <stop offset="100%" stop-color="#FDD835"/>
+    </radialGradient>
+
+    <!-- Balloon blue gradient -->
+    <radialGradient id="ballBlue" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#80DEEA"/>
+      <stop offset="100%" stop-color="#00ACC1"/>
+    </radialGradient>
+
+    <!-- Balloon green gradient -->
+    <radialGradient id="ballGreen" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#CCFF90"/>
+      <stop offset="100%" stop-color="#43A047"/>
+    </radialGradient>
+
+    <!-- Balloon lavender gradient -->
+    <radialGradient id="ballLavender" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#E1BEE7"/>
+      <stop offset="100%" stop-color="#8E24AA"/>
+    </radialGradient>
+
+    <!-- Skin tone -->
+    <radialGradient id="skinGrad" cx="45%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFD08A"/>
+      <stop offset="100%" stop-color="#E8A660"/>
+    </radialGradient>
+
+    <!-- Clip to rounded square -->
+    <clipPath id="roundedSquare">
+      <rect width="1024" height="1024" rx="224" ry="224"/>
+    </clipPath>
+
+    <!-- Wallpaper dot pattern -->
+    <pattern id="dotPattern" x="0" y="0" width="90" height="90" patternUnits="userSpaceOnUse">
+      <circle cx="45" cy="45" r="6" fill="#FFE082" fill-opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <!-- ── Rounded square clip ── -->
+  <g clip-path="url(#roundedSquare)">
+
+    <!-- Background -->
+    <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+    <!-- Wallpaper dots (wall area only) -->
+    <rect width="1024" height="799" fill="url(#dotPattern)"/>
+
+    <!-- Baseboard line -->
+    <rect x="0" y="793" width="1024" height="10" fill="#BCAAA4"/>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  BALLOONS                               -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <!-- Balloon 1 — red (left) -->
+    <g transform="translate(185, 260) rotate(-8)">
+      <ellipse cx="0" cy="0" rx="62" ry="72" fill="url(#ballRed)"/>
+      <!-- highlight -->
+      <ellipse cx="-16" cy="-22" rx="18" ry="14" fill="white" fill-opacity="0.35"/>
+      <!-- knot -->
+      <path d="M-6 72 Q0 80 6 72" stroke="#C62828" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- string -->
+      <path d="M0 76 Q-18 140 -10 200" stroke="#BCAAA4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Balloon 2 — yellow (left-center) -->
+    <g transform="translate(310, 195) rotate(5)">
+      <ellipse cx="0" cy="0" rx="56" ry="66" fill="url(#ballYellow)"/>
+      <ellipse cx="-14" cy="-20" rx="16" ry="12" fill="white" fill-opacity="0.35"/>
+      <path d="M-5 66 Q0 74 5 66" stroke="#F57F17" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 70 Q12 130 8 185" stroke="#BCAAA4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Balloon 3 — lavender (center) -->
+    <g transform="translate(512, 170) rotate(-3)">
+      <ellipse cx="0" cy="0" rx="64" ry="75" fill="url(#ballLavender)"/>
+      <ellipse cx="-17" cy="-24" rx="19" ry="14" fill="white" fill-opacity="0.35"/>
+      <path d="M-6 75 Q0 84 6 75" stroke="#6A1B9A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 80 Q5 150 0 210" stroke="#BCAAA4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Balloon 4 — blue (right-center) -->
+    <g transform="translate(710, 200) rotate(6)">
+      <ellipse cx="0" cy="0" rx="58" ry="68" fill="url(#ballBlue)"/>
+      <ellipse cx="-15" cy="-21" rx="17" ry="13" fill="white" fill-opacity="0.35"/>
+      <path d="M-5 68 Q0 76 5 68" stroke="#006064" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 72 Q-10 135 -5 190" stroke="#BCAAA4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Balloon 5 — green (right) -->
+    <g transform="translate(840, 265) rotate(-5)">
+      <ellipse cx="0" cy="0" rx="60" ry="70" fill="url(#ballGreen)"/>
+      <ellipse cx="-16" cy="-22" rx="18" ry="13" fill="white" fill-opacity="0.35"/>
+      <path d="M-6 70 Q0 78 6 70" stroke="#1B5E20" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 74 Q16 138 10 200" stroke="#BCAAA4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  TREVOR CHARACTER                       -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <!-- Shadow under feet -->
+    <ellipse cx="512" cy="870" rx="110" ry="18" fill="#B0A09C" fill-opacity="0.35"/>
+
+    <!-- Legs -->
+    <rect x="464" y="758" width="42" height="90" rx="21" fill="#5D4037"/>
+    <rect x="518" y="758" width="42" height="90" rx="21" fill="#5D4037"/>
+
+    <!-- Shoes -->
+    <ellipse cx="485" cy="850" rx="34" ry="18" fill="#3E2723"/>
+    <ellipse cx="539" cy="850" rx="34" ry="18" fill="#3E2723"/>
+
+    <!-- Body / T-shirt -->
+    <rect x="434" y="610" width="156" height="165" rx="38" fill="#FF7043"/>
+
+    <!-- Shirt stripe details -->
+    <rect x="434" y="645" width="156" height="12" rx="6" fill="#E64A19" fill-opacity="0.5"/>
+    <rect x="434" y="670" width="156" height="12" rx="6" fill="#E64A19" fill-opacity="0.5"/>
+
+    <!-- Arms -->
+    <!-- Left arm (raised slightly, holding balloon string) -->
+    <path d="M434 650 Q370 580 310 530" stroke="#E8A660" stroke-width="44" fill="none" stroke-linecap="round"/>
+    <!-- Right arm (down and out, relaxed) -->
+    <path d="M590 650 Q648 620 680 660" stroke="#E8A660" stroke-width="44" fill="none" stroke-linecap="round"/>
+
+    <!-- Left hand -->
+    <circle cx="307" cy="527" r="26" fill="#E8A660"/>
+
+    <!-- Right hand -->
+    <circle cx="683" cy="660" r="26" fill="#E8A660"/>
+
+    <!-- Neck -->
+    <rect x="490" y="566" width="44" height="52" rx="14" fill="url(#skinGrad)"/>
+
+    <!-- Head -->
+    <ellipse cx="512" cy="510" rx="108" ry="112" fill="url(#skinGrad)"/>
+
+    <!-- Hair -->
+    <path d="M404 478 Q408 348 512 348 Q616 348 620 478 Q580 420 512 428 Q444 420 404 478 Z" fill="#3E2723"/>
+    <!-- Hair highlight -->
+    <path d="M445 390 Q480 365 520 368" stroke="#6D4C41" stroke-width="10" fill="none" stroke-linecap="round" fill-opacity="0.5"/>
+
+    <!-- Ears -->
+    <ellipse cx="405" cy="510" rx="22" ry="28" fill="#E8A660"/>
+    <ellipse cx="619" cy="510" rx="22" ry="28" fill="#E8A660"/>
+
+    <!-- Eyes — big and happy, slight upward curve (smiling eyes) -->
+    <!-- Left eye white -->
+    <ellipse cx="473" cy="500" rx="28" ry="30" fill="white"/>
+    <!-- Right eye white -->
+    <ellipse cx="551" cy="500" rx="28" ry="30" fill="white"/>
+    <!-- Left iris -->
+    <circle cx="476" cy="504" r="18" fill="#4E342E"/>
+    <!-- Right iris -->
+    <circle cx="554" cy="504" r="18" fill="#4E342E"/>
+    <!-- Left pupil -->
+    <circle cx="480" cy="506" r="10" fill="#1A1A1A"/>
+    <!-- Right pupil -->
+    <circle cx="558" cy="506" r="10" fill="#1A1A1A"/>
+    <!-- Eye sparkles -->
+    <circle cx="485" cy="499" r="4" fill="white"/>
+    <circle cx="563" cy="499" r="4" fill="white"/>
+
+    <!-- Happy smile -->
+    <path d="M462 548 Q512 590 562 548" stroke="#C0392B" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <!-- Smile fill -->
+    <path d="M462 548 Q512 590 562 548 Q512 570 462 548 Z" fill="#E91E63" fill-opacity="0.25"/>
+
+    <!-- Rosy cheeks -->
+    <ellipse cx="435" cy="530" rx="26" ry="16" fill="#FF8A80" fill-opacity="0.40"/>
+    <ellipse cx="589" cy="530" rx="26" ry="16" fill="#FF8A80" fill-opacity="0.40"/>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  BALLOON STRING FROM LEFT HAND          -->
+    <!-- ═══════════════════════════════════════ -->
+    <!-- String connecting left hand to balloons above -->
+    <path d="M307 501 Q270 380 310 280 Q340 220 370 195" stroke="#BCAAA4" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="0"/>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  FLOATING STARS                         -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <!-- Star 1 -->
+    <g transform="translate(142, 400) scale(0.8)">
+      <polygon points="0,-24 6,-8 24,-8 10,4 16,22 0,12 -16,22 -10,4 -24,-8 -6,-8" fill="#FFD740" stroke="#FFB300" stroke-width="2"/>
+    </g>
+
+    <!-- Star 2 -->
+    <g transform="translate(880, 380) scale(0.65)">
+      <polygon points="0,-24 6,-8 24,-8 10,4 16,22 0,12 -16,22 -10,4 -24,-8 -6,-8" fill="#FFD740" stroke="#FFB300" stroke-width="2"/>
+    </g>
+
+    <!-- Star 3 (small, top area) -->
+    <g transform="translate(420, 118) scale(0.5)">
+      <polygon points="0,-24 6,-8 24,-8 10,4 16,22 0,12 -16,22 -10,4 -24,-8 -6,-8" fill="#FFD740" stroke="#FFB300" stroke-width="2"/>
+    </g>
+
+    <!-- Star 4 -->
+    <g transform="translate(605, 125) scale(0.55)">
+      <polygon points="0,-24 6,-8 24,-8 10,4 16,22 0,12 -16,22 -10,4 -24,-8 -6,-8" fill="#FFD740" stroke="#FFB300" stroke-width="2"/>
+    </g>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  "TREVOR" NAME TEXT                     -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <!-- Text backdrop pill -->
+    <rect x="342" y="893" width="340" height="70" rx="35" fill="#FF7043" fill-opacity="0.92"/>
+
+    <!-- Name -->
+    <text
+      x="512" y="942"
+      text-anchor="middle"
+      font-family="'Helvetica Rounded', 'Arial Rounded MT Bold', Arial, sans-serif"
+      font-size="46"
+      font-weight="900"
+      letter-spacing="4"
+      fill="white"
+      paint-order="stroke"
+      stroke="#E64A19"
+      stroke-width="3"
+      stroke-linejoin="round"
+    >TREVOR</text>
+
+  </g>
+</svg>
